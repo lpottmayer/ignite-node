@@ -2,7 +2,7 @@ import express from 'express';
 
 import { router } from './routes';
 
-// import "./database";
+import "./database";
 
 const app = express();
 

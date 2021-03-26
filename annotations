@@ -1,0 +1,5 @@
+Create Migration: 
+    yarn typeorm migration:create -n CreateCategories
+
+Apply Migration:
+    yarn typeorm migration:run
