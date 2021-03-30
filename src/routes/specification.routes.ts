@@ -1,26 +1,27 @@
 import { Router } from 'express';
-
-import { SpecificationsRepository } from '../modules/cars/repositories/implementatios/SpecificationsRepository';
-import { CreateSpecificationService } from '../modules/cars/services/CreateSpecificationService';
+import multer from 'multer';
+import { CreateSpecificationController } from '../modules/cars/useCases/createSpecification/CreateSpecificationController';
+import { ListSpecificationsController } from '../modules/cars/useCases/listSpecifications/ListSpecificationsController';
 
 const specificationsRoutes = Router();
 
-const specificationsRepository = new SpecificationsRepository();
-
-specificationsRoutes.post("/", (req, res) => {
-    const { name, description } = req.body;
-
-    const createCategoryService = new CreateSpecificationService(specificationsRepository);
-
-    createCategoryService.execute({ name, description });
-
-    return res.status(201).send();
-});
-
-// specificationsRoutes.get("/", (req, res) => {
-//     const all = specificationsRepository.list();
-
-//     return res.json(all);
+// const upload = multer({
+//     dest: "./tmp"
 // });
+
+const createSpecificationController = new CreateSpecificationController();
+const listSpecificationsController = new ListSpecificationsController();
+
+// POST
+specificationsRoutes.post("/", createSpecificationController.handle);
+
+// QUERY
+specificationsRoutes.get("/", listSpecificationsController.handle);
+
+// GET
+
+// UPDATE
+
+// DELETE
 
 export { specificationsRoutes };

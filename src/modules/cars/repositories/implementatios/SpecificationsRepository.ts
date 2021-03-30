@@ -1,43 +1,36 @@
 
-import { Specification } from "../../model/Specification";
+import { getRepository, Repository } from "typeorm";
+import { Specification } from "../../entities/Specification";
 import { ICreateSpecificationDTO, ISpecificationsRepository } from "../ISpecificationsRepository";
 
 class SpecificationsRepository implements ISpecificationsRepository {
 
-    private specifications: Specification[];
+    private repository: Repository<Specification>;
 
-    private static INSTANCE: SpecificationsRepository;
-
-    private constructor() {
-        this.specifications = [];
+    constructor() {
+        this.repository = getRepository(Specification);
     }
 
-    public static getInstance(): SpecificationsRepository {
-        if (!SpecificationsRepository.INSTANCE){
-            SpecificationsRepository.INSTANCE = new SpecificationsRepository();
-        }
-
-        return SpecificationsRepository.INSTANCE;
-    }
-
-    create({ name, description }: ICreateSpecificationDTO): void {
-        const specification = new Specification();
-        
-        Object.assign(specification, {
-            name,
+    async create({ name, description }: ICreateSpecificationDTO): Promise<void> {
+        const specification = this.repository.create({
             description,
-            created_at: new Date()
+            name
+        })
+
+        await this.repository.save(specification);
+    }
+
+    async list(): Promise<Specification[]> {
+        const specifications = await this.repository.find();
+        return specifications;
+    }
+
+    async findByName(name: string): Promise<Specification> {
+        const specification = await this.repository.findOne({
+            name
         });
 
-        this.specifications.push(specification);
-    }
-
-    findByName(name: string): Specification {
-        return this.specifications.find(specification => specification.name === name);
-    }
-
-    list(): Specification[] {
-        return this.specifications;
+        return specification;
     }
 
 }

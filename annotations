@@ -1,5 +1,8 @@
 Create Migration: 
     yarn typeorm migration:create -n CreateCategories
 
+Enter on Docker Container
+    docker exec -it [container-id] bash
+
 Apply Migration:
     yarn typeorm migration:run
