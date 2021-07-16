@@ -1,12 +1,14 @@
 import express, { NextFunction, Request, Response } from 'express';
 import "express-async-errors";
 
-import "../typeorm";
+import createConnection from "../typeorm";
 
 import "../../container";
 
 import { router } from './routes';
 import { AppError } from '../../errors/AppError';
+
+createConnection();
 
 const app = express();
 
